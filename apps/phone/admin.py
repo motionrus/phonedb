@@ -2,25 +2,8 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import ExternalNumber, InternalNumber, Client
+from .models import ExternalNumber, InternalNumber, Customer
 
-
-class InternalNumberAdmin(admin.StackedInline):
-    model = InternalNumber
-    extra = 1
-
-class CustomerClient(admin.StackedInline):
-    model = ExternalNumber
-    extra = 1
-
-class ExternalNumberAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['calling_line',
-                           'type_of_access',
-                           ]}),
-    ]
-
-    inlines = [InternalNumberAdmin]
-
-
-admin.site.register(ExternalNumber, ExternalNumberAdmin)
+admin.site.register(ExternalNumber)
+admin.site.register(InternalNumber)
+admin.site.register(Customer)
