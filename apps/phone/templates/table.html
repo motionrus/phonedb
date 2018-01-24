@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+
   <h1 class="page-header">Распределение телефонных номеров</h1>
+
+      <!-- BUTTON TO TRIGGER THE ACTION -->
+  <p>
+    <button type="button" class="btn btn-primary js-create-book">
+      <span class="glyphicon glyphicon-plus"></span>
+      Добавить
+    </button>
+  </p>
   <table class="table" id="book-table">
     <thead>
       <tr>
@@ -41,12 +50,19 @@
                 <td>{{ number.AON }}</td>
                 <td>{{ number.get_type_of_access_display }}</td>
             </tr>
-          {% empty %}
-            <tr>
-              <td colspan="7" class="text-center bg-warning">No Customers</td>
-            </tr>
           {% endfor %}
+            {% empty %}
+            <tr>
+              <td colspan="15" class="text-center bg-warning">No Customers</td>
+            </tr>
       {% endfor %}
     </tbody>
   </table>
+
+    <div class="modal fade" id="modal-book">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
 {% endblock %}
