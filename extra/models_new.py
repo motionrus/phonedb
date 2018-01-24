@@ -1,15 +1,14 @@
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 
-COLLECTIVE_NUMBER = ['84959830402', '84959830535']
+
+# Create your models here.
 
 
 class Customer(models.Model):
     STATUS = (
-        ('1', 'Активный'),
-        ('0', 'Отключен'),
+        ('1', 'Enabled'),
+        ('0', 'Disabled'),
     )
 
     name = models.CharField(max_length=255)
@@ -32,7 +31,7 @@ class Device(models.Model):
     lan = models.GenericIPAddressField(protocol='IPv4', blank=True, null=True)
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.wan)
+        return self.name
 
 
 class Number(models.Model):
@@ -47,10 +46,10 @@ class Number(models.Model):
         ('free', 'свободный')
     )
     internal_type = models.CharField(max_length=20,
-                                     choices=TYPE_OF_INTNUM,
-                                     default='MTT')
+                            choices=TYPE_OF_INTNUM,
+                            default='MTT')
     internal_number = models.CharField(max_length=6, unique=True)
-    internal_password = models.CharField(max_length=20, blank=True, null=True)
+    internal_password = models.CharField(max_length=20)
     customer = models.ForeignKey(Customer,
                                  on_delete=models.CASCADE,
                                  blank=True,
@@ -59,21 +58,9 @@ class Number(models.Model):
                                on_delete=models.CASCADE,
                                blank=True,
                                null=True)
-    AON = models.CharField(max_length=11, blank=True, null=True)
+    AON = models.CharField(max_length=11)
     type_of_access = models.CharField(max_length=10,
-                                      choices=TYPE_OF_EXT, default='free')
+                                      choices=TYPE_OF_EXT)
 
     def __str__(self):
-        return '"{}" <=> "{}"'.format(self.internal_number, self.AON)
-
-
-@receiver(pre_save, sender=Number)
-def my_handler(sender, instance, **kwargs):
-    instance.type_of_access = 'specific'
-    if instance.AON == '':
-        instance.type_of_access = 'free'
-        return
-    if instance.AON in COLLECTIVE_NUMBER:
-        instance.type_of_access = 'any'
-        return
-
+        return 'int: "{}", ext: "{}"'.format(self.internal_number, self.AON)
