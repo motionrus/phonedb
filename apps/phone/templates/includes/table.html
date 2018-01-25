@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block javascript %}
+    <script src="{% static 'js/phone.js' %}"></script>
+{% endblock %}
 {% block content %}
 
   <h1 class="page-header">Распределение телефонных номеров</h1>
@@ -31,31 +35,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for customer in customers %}
-          {% for number in customer.number_set.all %}
-            <tr>
-                <td>{{ number.id }}</td>
-                <td>{{ number.internal_number }}</td>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.get_status_display }}</td>
-                <td>{{ customer.address }}</td>
-                <td>{{ customer.description }}</td>
-                <td>{{ customer.date_last_change }}</td>
-                <td>{{ number.internal_type }}</td>
-                <td>{{ number.internal_password }}</td>
-                <td>{{ number.device.name }}</td>
-                <td>{{ number.device.login }}</td>
-                <td>{{ number.device.password }}</td>
-                <td>{{ number.device.wan }}</td>
-                <td>{{ number.AON }}</td>
-                <td>{{ number.get_type_of_access_display }}</td>
-            </tr>
-          {% endfor %}
-            {% empty %}
-            <tr>
-              <td colspan="15" class="text-center bg-warning">No Customers</td>
-            </tr>
-      {% endfor %}
+        {% include 'includes/part_list.html' %}
     </tbody>
   </table>
 
