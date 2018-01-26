@@ -20,13 +20,13 @@ def customer_list(request):
 def customer_create(request):
     data = dict()
     if request.method == 'POST':
-        form = CustomerForm(request.POST)
-        form2 = NumberForm(request.POST)
-        if form.is_valid() and form2.is_valid():
-            form.save()
-            my_model = form2.save(commit=False)
-            my_model.customer = Customer.objects.get(request.POST['name'])
-            form2.save()
+        form_customer = CustomerForm(request.POST)
+        form_number = NumberForm(request.POST)
+        if form_customer.is_valid() and form_number.is_valid():
+            form_customer.save()
+            post_form_number = form_number.save(commit=False)
+            post_form_number.customer = Customer.objects.get(name=request.POST['name'])
+            post_form_number.save()
             data['form_is_valid'] = True
             customers = Customer.objects.all()
             data['html_customer_list'] = render_to_string('includes/part_list.html', {
@@ -35,10 +35,10 @@ def customer_create(request):
         else:
             data['form_is_valid'] = False
     else:
-        form = CustomerForm()
-        form2 = NumberForm()
+        form_customer = CustomerForm()
+        form_number = NumberForm()
 
-    context = {'form': form, 'form2': form2}
+    context = {'form': form_customer, 'form2': form_number}
     data['html_form'] = render_to_string('includes/create_customer.html',
                                  context,
                                  request=request,
