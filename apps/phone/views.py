@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from apps.phone.models import Customer
+from apps.phone.models import Customer, Number
 from apps.phone.forms import CustomerForm, NumberForm
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -17,7 +18,7 @@ def customer_list(request):
     return render(request, 'includes/table.html', {'customers': customers})
 
 
-def customer_create(request):
+def save_customer(request, form_customer, form_number, template_name):
     data = dict()
     if request.method == 'POST':
         form_customer = CustomerForm(request.POST)
@@ -34,15 +35,29 @@ def customer_create(request):
             })
         else:
             data['form_is_valid'] = False
+    context = {'form_customer': form_customer, 'form_number': form_number}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
+
+
+def customer_create(request):
+    if request.method == 'POST':
+        form_customer = CustomerForm(request.POST)
+        form_number = NumberForm(request.POST)
     else:
         form_customer = CustomerForm()
         form_number = NumberForm()
+    return save_customer(request, form_customer, form_number, 'includes/customer_create.html')
 
-    context = {'form': form_customer, 'form2': form_number}
-    data['html_form'] = render_to_string('includes/create_customer.html',
-                                 context,
-                                 request=request,
-                                 )
-    return JsonResponse(data)
 
+def customer_update(request, pk, phone):
+    customer = get_object_or_404(Customer, pk=int(pk))
+    number = get_object_or_404(Number, internal_number=phone)
+    if request.method == 'POST':
+        form_customer = CustomerForm(request.POST, instance=customer)
+        form_number = NumberForm(request.POST, instance=number)
+    else:
+        form_customer = CustomerForm(instance=customer)
+        form_number = NumberForm(instance=number)
+    return save_customer(request, form_customer, form_number, 'includes/customer_update.html')
 

@@ -1,7 +1,7 @@
 {% for customer in customers %}
   {% for number in customer.number_set.all %}
     <tr>
-        <td>{{ number.id }}</td>
+        <td>{{ customer.pk }}</td>
         <td>{{ number.internal_number }}</td>
         <td>{{ customer.name }}</td>
         <td>{{ customer.get_status_display }}</td>
@@ -16,6 +16,13 @@
         <td>{{ number.device.wan }}</td>
         <td>{{ number.AON }}</td>
         <td>{{ number.get_type_of_access_display }}</td>
+        <td>
+          <button type="button"
+                  class="btn btn-warning btn-sm js-update-customer"
+                  data-url="{% url 'customer_update' pk=customer.pk phone=number.internal_number %}">
+            <span class="glyphicon glyphicon-pencil"></span> Edit
+          </button>
+        </td>
     </tr>
   {% endfor %}
     {% empty %}

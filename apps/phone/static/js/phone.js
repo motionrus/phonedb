@@ -1,8 +1,9 @@
 $(function () {
 
-    $(".js-create-book").click(function () {
+    var loadForm = function (){
+    var btn = $(this)
     $.ajax({
-      url: '/table/create/',
+      url: btn.attr("data-url"),
       type: 'get',
       dataType: 'json',
       beforeSend: function () {
@@ -14,7 +15,7 @@ $(function () {
     });
     });
 
-    $("#modal-book").on("submit", ".js-book-create-form", function () {
+    var saveForm = function () {
     var form = $(this);
     $.ajax({
       url: form.attr("action"),
@@ -34,4 +35,13 @@ $(function () {
     return false;
     });
 
+    /* Binding */
+
+  // Create book
+  $(".js-create-book").click(loadForm);
+  $("#modal-book").on("submit", ".js-create-customer", saveForm);
+
+  // Update book
+  $("#book-table").on("click", ".js-update-customer", loadForm);
+  $("#modal-book").on("submit", ".js-customer-update-form", saveForm);
 });
