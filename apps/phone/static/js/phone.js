@@ -13,7 +13,7 @@ $(function () {
         $("#modal-book .modal-content").html(data.html_form);
       }
     });
-    });
+    };
 
     var saveForm = function () {
     var form = $(this);
@@ -33,15 +33,17 @@ $(function () {
       }
     });
     return false;
-    });
+    };
 
     /* Binding */
 
   // Create book
-  $(".js-create-book").click(loadForm);
-  $("#modal-book").on("submit", ".js-create-customer", saveForm);
+  $(".js-create-customer").click(loadForm);
+  $("#modal-book").on("submit", ".js-create-customer-form", saveForm);
 
   // Update book
   $("#book-table").on("click", ".js-update-customer", loadForm);
   $("#modal-book").on("submit", ".js-customer-update-form", saveForm);
+
+
 });

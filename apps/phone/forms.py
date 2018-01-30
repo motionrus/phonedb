@@ -27,3 +27,15 @@ class DeviceForm(forms.ModelForm):
             'password',
             'wan',
         )
+
+
+class CreateNumberForm(forms.ModelForm):
+    class Meta:
+        model = Number
+        fields = (
+            'internal_number',
+            'internal_type',
+            'internal_password',
+            'device',
+            'AON',
+        )

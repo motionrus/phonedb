@@ -2,6 +2,11 @@
   {% for number in customer.number_set.all %}
     <tr>
         <td>{{ customer.pk }}</td>
+        <td><button
+                type="button"
+                class="btn btn-warning btn-sm js-update-customer"
+                data-url="{% url 'number_create' pk=customer.pk phone=number.internal_number %}">
+            <span class="glyphicon glyphicon-plus"></span> Add</button></td>
         <td>{{ number.internal_number }}</td>
         <td>{{ customer.name }}</td>
         <td>{{ customer.get_status_display }}</td>
