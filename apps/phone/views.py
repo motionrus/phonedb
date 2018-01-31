@@ -48,6 +48,18 @@ def customer_create(request):
     return save_customer(request, form_customer, form_number, 'includes/customer_create.html')
 
 
+def customer_update(request, pk, phone):
+    customer = get_object_or_404(Customer, pk=int(pk))
+    number = get_object_or_404(Number, internal_number=phone)
+    if request.method == 'POST':
+        form_customer = CustomerForm(request.POST, instance=customer)
+        form_number = NumberForm(request.POST, instance=number)
+    else:
+        form_customer = CustomerForm(instance=customer)
+        form_number = NumberForm(instance=number)
+    return save_customer(request, form_customer, form_number, 'includes/customer_update.html')
+
+
 def number_create(request, pk, phone):
     data = dict()
     customer = get_object_or_404(Customer, pk=pk)
@@ -64,25 +76,21 @@ def number_create(request, pk, phone):
                 'customers': Customer.objects.all()})
         else:
             data['form_is_valid'] = False
-
     context = {'form_number': form_number, 'pk': pk, 'phone': phone}
     data['html_form'] = render_to_string('includes/number_create.html', context, request=request)
     return JsonResponse(data)
 
 
-def customer_update(request, pk, phone):
-    customer = get_object_or_404(Customer, pk=int(pk))
-    number = get_object_or_404(Number, internal_number=phone)
-    if request.method == 'POST':
-        form_customer = CustomerForm(request.POST, instance=customer)
-        form_number = NumberForm(request.POST, instance=number)
-    else:
-        form_customer = CustomerForm(instance=customer)
-        form_number = NumberForm(instance=number)
-    return save_customer(request, form_customer, form_number, 'includes/customer_update.html')
-
-
 def customer_delete(request, phone):
     phone = get_object_or_404(Number, internal_number=phone)
-    print(phone)
-    pass
+    data = dict()
+    if request.method == 'POST':
+        phone.delete()
+        data['form_is_valid'] = True
+        data['html_customer_list'] = render_to_string('includes/part_list.html', {
+            'customers': Customer.objects.all()
+        })
+    else:
+        context = {'phone': phone}
+        data['html_form'] = render_to_string('includes/number_delete.html', context, request=request)
+    return JsonResponse(data)

@@ -37,13 +37,15 @@ $(function () {
 
     /* Binding */
 
-  // Create book
-  $(".js-create-customer").click(loadForm);
-  $("#modal-book").on("submit", ".js-create-customer-form", saveForm);
+    // Create book
+    $(".js-create-customer").click(loadForm);
+    $("#modal-book").on("submit", ".js-create-customer-form", saveForm);
 
-  // Update book
-  $("#book-table").on("click", ".js-update-customer", loadForm);
-  $("#modal-book").on("submit", ".js-customer-update-form", saveForm);
+    // Update book
+    $("#book-table").on("click", ".js-update-customer", loadForm);
+    $("#modal-book").on("submit", ".js-customer-update-form", saveForm);
 
-
+    // Delete book
+    $("#book-table").on("click", ".js-delete-book", loadForm);
+    $("#modal-book").on("submit", ".js-book-delete-form", saveForm);
 });

@@ -22,11 +22,18 @@
         <td>{{ number.AON }}</td>
         <td>{{ number.get_type_of_access_display }}</td>
         <td>
-          <button type="button"
-                  class="btn btn-warning btn-sm js-update-customer"
-                  data-url="{% url 'customer_update' pk=customer.pk phone=number.internal_number %}">
-            <span class="glyphicon glyphicon-pencil"></span> Edit
-          </button>
+            <button type="button"
+                class="btn btn-warning btn-sm js-update-customer"
+                data-url="{% url 'customer_update' pk=customer.pk phone=number.internal_number %}">
+                <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+        </td>
+        <td>
+            <button type="button"
+                class="btn btn-danger btn-sm js-delete-book"
+                data-url="{% url 'customer_delete' number.internal_number %}">
+                <span class="glyphicon glyphicon-trash"></span> Delete
+            </button>
         </td>
     </tr>
   {% endfor %}
