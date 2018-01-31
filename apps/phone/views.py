@@ -22,9 +22,9 @@ def save_customer(request, form_customer, form_number, template_name):
     data = dict()
     if request.method == 'POST':
         if form_customer.is_valid() and form_number.is_valid():
-            form_customer.save()
+            customer = form_customer.save()
             post_form_number = form_number.save(commit=False)
-            post_form_number.customer = Customer.objects.get(name=request.POST['name'])
+            post_form_number.customer = customer
             post_form_number.save()
             data['form_is_valid'] = True
             customers = Customer.objects.all()
