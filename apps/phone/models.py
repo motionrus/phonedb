@@ -1,6 +1,7 @@
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_delete
 from django.dispatch import receiver
+
 from django.core.exceptions import ValidationError
 
 COLLECTIVE_NUMBER = ['84959830402', '84959830535']
@@ -77,3 +78,10 @@ def my_handler(sender, instance, **kwargs):
         instance.type_of_access = 'any'
         return
 
+
+@receiver(post_delete, sender=Number)
+def remove_client_with_no_numbers(sender, instance, **kwargs):
+    customer = instance.customer
+    if not Number.objects.filter(customer=customer):
+        print('удаление клиента')
+        customer.delete()

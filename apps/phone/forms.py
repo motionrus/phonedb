@@ -39,3 +39,11 @@ class CreateNumberForm(forms.ModelForm):
             'device',
             'AON',
         )
+
+
+class TestForm(forms.ModelForm):
+    name = forms.CharField(max_length=255)
+    login = forms.CharField(max_length=255)
+    password = forms.CharField(max_length=255)
+    wan = forms.GenericIPAddressField(protocol='IPv4')
+    lan = forms.GenericIPAddressField(protocol='IPv4')
