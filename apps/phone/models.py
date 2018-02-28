@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_delete
 from django.dispatch import receiver
+from django.core.validators import RegexValidator
 
 from django.core.exceptions import ValidationError
 
@@ -37,6 +38,7 @@ class Device(models.Model):
 
 
 class Number(models.Model):
+    REGEXP_NUMBER_AMTEL = '^8(4951089[567]\d{2}|49598304[0-2]\d|49598305[2-4]\d|4959830550)$'
     TYPE_OF_INTNUM = (
         ('SKD', 'СКД'),
         ('MTT', 'МТТ'),
@@ -50,7 +52,12 @@ class Number(models.Model):
     internal_type = models.CharField(max_length=20,
                                      choices=TYPE_OF_INTNUM,
                                      default='MTT')
-    internal_number = models.CharField(max_length=6, unique=True)
+    internal_number = models.CharField(max_length=6, unique=True, validators=[RegexValidator(
+        regex='^\d{6}$',
+        message='Must be contain 6 digits',
+        code='invalid_internal_number'
+    )])
+
     internal_password = models.CharField(max_length=20, blank=True, null=True)
     customer = models.ForeignKey(Customer,
                                  on_delete=models.CASCADE,
@@ -60,7 +67,11 @@ class Number(models.Model):
                                on_delete=models.CASCADE,
                                blank=True,
                                null=True)
-    AON = models.CharField(max_length=11, blank=True, null=True)
+    AON = models.CharField(max_length=11, blank=True, null=True, validators=[RegexValidator(
+        regex=REGEXP_NUMBER_AMTEL,
+        message='Must be contain AMTEL number',
+        code='invalid_external_number'
+    )])
     type_of_access = models.CharField(max_length=10,
                                       choices=TYPE_OF_EXT, default='free')
 
@@ -85,3 +96,4 @@ def remove_client_with_no_numbers(sender, instance, **kwargs):
     if not Number.objects.filter(customer=customer):
         print('удаление клиента')
         customer.delete()
+

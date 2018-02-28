@@ -11,7 +11,7 @@ class Customer(models.Model):
         ('0', 'Disabled'),
     )
 
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     status = models.CharField(max_length=10,
                               choices=STATUS,
                               default='0')

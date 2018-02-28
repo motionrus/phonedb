@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from apps.phone.models import Customer, Number
-from apps.phone.forms import CustomerForm, NumberForm, CreateNumberForm
+from apps.phone.forms import CustomerForm, NumberForm, CreateNumberForm, EnhancedNumberForm
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -93,4 +93,24 @@ def customer_delete(request, phone):
     else:
         context = {'phone': phone}
         data['html_form'] = render_to_string('includes/number_delete.html', context, request=request)
+    return JsonResponse(data)
+
+
+def customer_create_test(request):
+    data = dict()
+    if request.method == 'POST':
+        form_all = EnhancedNumberForm(request.POST)
+        if form_all.is_valid():
+            form_all.save()
+            data['form_is_valid'] = True
+            customers = Customer.objects.all()
+            data['html_customer_list'] = render_to_string('includes/part_list.html', {
+                'customers': customers
+            })
+        else:
+            data['form_is_valid'] = False
+    else:
+        form_all = EnhancedNumberForm()
+    context = {'form_customer': form_all}
+    data['html_form'] = render_to_string('includes/customer_create.html', context, request=request)
     return JsonResponse(data)
