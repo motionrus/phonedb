@@ -1,0 +1,21 @@
+{% load widget_tweaks %}
+<form method="POST"
+      action = "{% url 'number_create' pk=pk phone=phone %}"
+      class="js-customer-update-form">
+  {% csrf_token %}
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Добавить номер для клиента: "{{ form_number.customer }}"</h4>
+  </div>
+  <div class="modal-body">
+
+    {% include 'includes/form_customer.html' %}
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Add number</button>
+  </div>
+</form>

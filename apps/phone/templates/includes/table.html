@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block javascript %}
+    <script src="{% static 'js/phone.js' %}"></script>
+{% endblock %}
+{% block content %}
+
+  <h1 class="page-header">Распределение телефонных номеров</h1>
+
+      <!-- BUTTON TO TRIGGER THE ACTION -->
+  <p>
+    <button type="button" class="btn btn-primary js-create-customer"
+        data-url="{% url 'customer_create' %}">
+      <span class="glyphicon glyphicon-plus"></span>
+      Добавить
+    </button>
+  </p>
+  <table class="table" id="book-table">
+    <thead>
+      <tr>
+        <th>#</th>
+          <th colspan="2" class="text-center">Внутренний номер</th>
+          <th>Имя клиента</th>
+          <th>Статус</th>
+          <th>Адрес</th>
+          <th>Описание клиента</th>
+          <th>Дата</th>
+          <th>Тип номера</th>
+          <th>Пароль внутреннего номера</th>
+          <th>Устройство</th>
+          <th>Логин</th>
+          <th>Пароль</th>
+          <th>IP Адрес</th>
+          <th>Внешний номер</th>
+          <th colspan="2" class="text-center">Тип номера</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% include 'includes/part_list.html' %}
+    </tbody>
+  </table>
+
+    <div class="modal fade" id="modal-book">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+{% endblock %}
